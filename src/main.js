@@ -12,9 +12,11 @@ function displayProductList() {
         const productCard = document.createElement('div');
         productCard.classList.add('col-lg-4', 'col-md-6', 'mb-4');
         productCard.innerHTML = `
-          <div class="card">
+          <div class="card" style="text-align: center">
             <div class="card-body">
               <h5 class="card-title">${product.name}</h5>
+              <img src="${product.image}" alt="${product.name}" class="img-fluid" style="height: 250px">
+              <p class="card-text">${product.description}</p>
               <p class="card-text">$${product.price.toFixed(2)}</p>
               <button class="btn btn-primary add-to-cart" data-product-id="${product.id}">Add to Cart</button>
             </div>

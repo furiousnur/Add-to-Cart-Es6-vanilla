@@ -62,16 +62,18 @@ function displayCartItems() {
 
     cartItems.forEach((item) => {
         const cartItem = document.createElement('div');
-        cartItem.classList.add('col-4', 'mb-3');
+        cartItem.classList.add('col-lg-4', 'col-md-6', 'col-sm-12', 'mb-4');
         cartItem.innerHTML = `
-      <div class="card">
+      <div class="card" style="text-align: center">
           <div class="card-body">
               <h5 class="card-title">${item.name}</h5>
+              <img src="${item.image}" alt="${item.name}" class="img-fluid" style="height: 250px">
               <p class="card-text">Price: $${item.price.toFixed(2)}</p>
               <p class="card-text">Quantity: ${item.quantity}</p>
               <p class="card-text">Total: $${(item.price * item.quantity).toFixed(2)}</p>
-              <button class="btn btn-warning remove-from-cart" data-product-id="${item.id}">-</button> 
               <button class="btn btn-primary add-to-cart" data-product-id="${item.id}">+</button>
+              <button class="btn btn-warning remove-from-cart" data-product-id="${item.id}">-</button> 
+              <button class="btn btn-danger remove-full-from-cart" data-product-id="${item.id}">Remove</button>
           </div>
       </div>
     `;
@@ -83,6 +85,11 @@ function displayCartItems() {
         button.addEventListener('click', removeFromCart);
     });
 
+    const removeFullFromCartButtons = document.querySelectorAll('.remove-full-from-cart');
+    removeFullFromCartButtons.forEach((button) => {
+        button.addEventListener('click', removeProductFromCart);
+    });
+
     const addToCartButtons = document.querySelectorAll('.add-to-cart');
     addToCartButtons.forEach((button) => {
         button.addEventListener('click', addToCart);
@@ -90,6 +97,16 @@ function displayCartItems() {
 
     const cartSubtotal = document.getElementById('cartSubtotal');
     cartSubtotal.textContent = `$${calculateSubtotal()}`;
+}
+
+function removeProductFromCart(event) {
+    const removeProductId = parseInt(event.target.dataset.productId);
+    const index = cartItems.findIndex((item) => item.id === removeProductId);
+    if (index !== -1) {
+        cartItems.splice(index, 1);
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        displayCartItems();
+    }
 }
 
 function clearCart() {
